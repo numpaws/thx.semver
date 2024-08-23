@@ -1,17 +1,15 @@
 package thx.semver;
 
-using StringTools;
-
 abstract VersionRule(VersionComparator) from VersionComparator to VersionComparator {
   static var VERSION = ~/^(>=|<=|[v=><~^])?(\d+|[x*])(?:\.(\d+|[x*]))?(?:\.(\d+|[x*]))?(?:[-]([a-z0-9.-]+))?(?:[+]([a-z0-9.-]+))?$/i;
 
   @:from
   public static function stringToVersionRule(s:String):VersionRule {
     var ors = s.split("||").map((comp) -> {
-      comp = comp.trim();
+      comp = StringTools.trim(comp);
       var p = comp.split(" - ");
       return if (p.length == 1) {
-        comp = comp.trim();
+        comp = StringTools.trim(comp);
         p = (~/\s+/).split(comp);
         if (p.length == 1) {
           if (comp.length == 0) GreaterThanOrEqualVersion(Version.arrayToVersion([0,0,0]).withPre(VERSION.matched(5), VERSION.matched(6)));
